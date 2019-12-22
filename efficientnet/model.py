@@ -164,19 +164,7 @@ def get_dropout(**kwargs):
     Issue:
         https://github.com/tensorflow/tensorflow/issues/30946
     """
-    backend, layers, models, keras_utils = get_submodules_from_kwargs(kwargs)
-
-    class FixedDropout(layers.Dropout):
-        def _get_noise_shape(self, inputs):
-            if self.noise_shape is None:
-                return self.noise_shape
-
-            symbolic_shape = backend.shape(inputs)
-            noise_shape = [symbolic_shape[axis] if shape is None else shape
-                           for axis, shape in enumerate(self.noise_shape)]
-            return tuple(noise_shape)
-
-    return FixedDropout
+    return layers.Dropout
 
 
 def round_filters(filters, width_coefficient, depth_divisor):
